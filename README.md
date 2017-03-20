@@ -6,7 +6,7 @@ GDB for pwn.
 
 ### install
 	cd ~/
-	git clone https://github.com/scwuaptx/Pwngdb.git 
+	git clone https://github.com/0x9k/Pwngdb.git 
 	cp ~/Pwngdb/.gdbinit ~/
 
 If you dont want to use gdb-peda , you can modify the gdbinit to remove it.
@@ -56,6 +56,36 @@ If you want to use the feature of heapinfo and tracemalloc , you need to modify 
 	+ You need to run the process first than `tracemalloc on`, it will record all of the malloc and free.
 	+ You can set the `DEBUG` in pwngdb.py , than it will print all of the malloc and free infomation such as the screeshot.
 + `parseheap` : Parse heap layout
+
+
+## Debug PIE
++ `set_breakpoint_pie` : set breakpoint with pie program
+
+```python
+
+#python exp debug template
+
+from pwn import *
+
+r = process("./xxxx")
+
+def attach():
+    gdb.attach(r, execute='''
+        set_breakpoint_pie 0xda5
+        c
+            ''')
+    raw_input("joker")
+    #echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+    
+....
+
+attach()#automatic to set breakpoint
+...
+
+r.interactive()
+
+```
+
 
 ## Screenshot
 
