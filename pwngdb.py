@@ -171,6 +171,20 @@ class PwnCmd(object):
         (bit,pat) = normalize_argv(arg,2)
         off = (ord(pat) - 0x41)*(int(bit)/8)
         print(off)
+        
+    def set_breakpoint_pie(self,pie_addr_offset):
+        try :
+            codebs = codeaddr()[0]
+            if pie_addr_offset.startswith("0x"):
+                pie_addr_offset = int(pie_addr_offset,16)
+            else:
+                pie_addr_offset = int(pie_addr_offset)
+            breakpoint_addr = codebs + pie_addr_offset
+            cmd = "b *" + hex(breakpoint_addr)
+            print(gdb.execute(cmd,to_string=True))
+        except :
+            print( "useage:\tset_breakpoint_pie\t0xda5\n\tset_breakpoint_pie\t3493" )
+
 
 
 class PwngdbCmd(gdb.Command):
